@@ -10,10 +10,9 @@ import ProductsCard from "../components/ProductsCard";
 import { IProduct } from "../model/Products";
 
 // Make style with MUI
-const useStyle = makeStyles({
+const useStyles = makeStyles({
   root: {
-    marginTop: 20,
-    paddingTop: 100
+    marginTop: 100,
   },
   lazy: {
     width: "100%",
@@ -25,7 +24,7 @@ const useStyle = makeStyles({
 
 export default function ProductsPage() {
   // MUI styles
-  const classes = useStyle();
+  const classes = useStyles();
 
   // Manage state
   const [products, setProducts] = useState<IProduct[]>([]);
@@ -38,7 +37,6 @@ export default function ProductsPage() {
       .get("http://localhost:3001/api/products")
       .then((res) => {
         setProducts(res.data.data);
-        console.log(res.data.data)
         setLoadding(false);
       })
       .catch((err) => {
@@ -55,7 +53,7 @@ export default function ProductsPage() {
   return (
     // Container chua products
     <Container>
-      <Grid container spacing={2} className={classes.root}>
+      <Grid container spacing={3} className={classes.root}>
         {loading ? (
           <div className={classes.lazy}>
             <CircularProgress size="5px" thickness={5} />
