@@ -1,37 +1,62 @@
 import {
   Avatar,
   Box,
+  Button,
+  Container,
+  Divider,
   IconButton,
-  TextField,
+  makeStyles,
   Typography,
 } from "@material-ui/core";
-import { Delete } from "@material-ui/icons";
+import { Add, Delete, Remove } from "@material-ui/icons";
 import React from "react";
 
+const useStyles = makeStyles({
+  content:{
+    display: "flex",
+    padding: "10px 0",
+    justifyContent: "space-around"
+  },
+  images:{
+    width: "30%",
+    height: 150,
+    objectFit: "cover",
+  },
+  action:{
+    display: "flex",
+    justifyContent: "space-around",
+    marginTop: 40
+  }
+})
+
+
 export default function CartItem(props: Props) {
+  // Make style 
+  const classes = useStyles();
+
   return (
-    <Box>
-      <Avatar variant="rounded" alt="Product's Image" src={props.images} />
-      <Typography variant="h5">{props.name}</Typography>
-      <Typography variant="h5">{props.price}</Typography>
-      <TextField
-        style={{ width: "80px" }}
-        id="filled-number"
-        label="Quantity"
-        type="number"
-        InputLabelProps={{
-          shrink: true,
-        }}
-        variant="outlined"
-        defaultValue={props.quantity}
-        onChange={(event) =>
-          props.changeQuantity(props._id, parseInt(event.target.value))
-        }
-      />
+    <Container>
+      <Divider/>
+      <Box className={classes.content}>
+      <Avatar className={classes.images} variant="rounded" alt="Product's Image" src={props.images} />
+      <Box >
+        <Typography variant="h5">{props.name}</Typography>
+        <Box className={classes.action}>
+        <Button size="small" variant="outlined" color="secondary" onClick={()=>props.removeFromCart(props._id)}>
+          <Remove/>
+        </Button>
+        <Typography variant="h5">{props.quantity}</Typography>
+        <Button size="small" variant="outlined" color="secondary"  onClick={()=>props.addToCart(props._id)}>
+          <Add/>
+        </Button>
+        </Box>
       <IconButton onClick={() => props.deleteItem(props._id)}>
         <Delete />
       </IconButton>
-    </Box>
+      </Box>
+      </Box>
+      <Divider light />
+    </Container>
   );
 }
 type Props = {
@@ -41,5 +66,6 @@ type Props = {
   price: number;
   quantity: number;
   deleteItem(id: string): void;
-  changeQuantity(id: string, quantity: number): void;
+  addToCart(id: string): void;
+  removeFromCart(id: string): void;
 };

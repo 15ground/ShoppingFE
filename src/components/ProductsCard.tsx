@@ -60,7 +60,6 @@ export default function ProductsCard(props: Props) {
       listCart.push(newItems);
     }
     localStorage.setItem("cart", JSON.stringify(listCart));
-    alert("Add to cart successfully!");
   }
 
   return (
