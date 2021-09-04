@@ -76,7 +76,7 @@ export default function Cart() {
             price={product.price}
             quantity={items.quantity}
             deleteItem={(thisID) => {
-              let dataCart = cartItems;
+              let dataCart = [...cartItems];
               let index = dataCart.findIndex((items) => items.id === thisID);
               dataCart.splice(index, 1);
               localStorage.setItem("cart", JSON.stringify(dataCart));
@@ -84,7 +84,7 @@ export default function Cart() {
               loadCartData();
             }}
             changeQuantity={(thisID, quantity) => {
-              let changeCount = cartItems.slice();
+              let changeCount = [...cartItems];
               let index = changeCount.findIndex((x) => x.id === thisID);
               if (quantity < 0) {
                 changeCount.splice(index, 1);
