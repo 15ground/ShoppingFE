@@ -6,6 +6,7 @@ export default function Header() {
         <AppBar>
             <Toolbar>
                 <Typography variant="h5">Products</Typography>
+               
             </Toolbar>
         </AppBar>
     )

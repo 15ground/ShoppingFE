@@ -9,7 +9,9 @@ import {
   Typography,
 } from "@material-ui/core";
 import React from "react";
+import { CartItems } from "../model/CartItems";
 import { IProduct } from "../model/Products";
+import {formatNumber} from "../utils/Format"
 
 const useStyles = makeStyles({
   oot: {
@@ -28,6 +30,39 @@ const useStyles = makeStyles({
 });
 export default function ProductsCard(props: Props) {
   const classes = useStyles();
+
+  function callData() {
+    var cartItems: CartItems[] = [];
+    var jsonCart = localStorage.getItem("cart");
+    if (jsonCart != null) {
+      cartItems = JSON.parse(jsonCart);
+    } else {
+      localStorage.setItem("cart", "");
+    }
+    return cartItems;
+  }
+  function AddtoCart(idPros: string) {
+    var check = false;
+    var listCart: CartItems[] = callData();
+    // Kiem tra san pham trong gio hang
+    listCart.forEach((x) => {
+      if (x.id === idPros) {
+        ++x.quantity;
+        check = true;
+      }
+      return;
+    });
+    if (check === false) {
+      const newItems: CartItems = {
+        id: idPros,
+        quantity: 1,
+      };
+      listCart.push(newItems);
+    }
+    localStorage.setItem("cart", JSON.stringify(listCart));
+    alert("Add to cart successfully!");
+  }
+
   return (
     <Card>
       <CardActionArea>
@@ -40,17 +75,17 @@ export default function ProductsCard(props: Props) {
           <Typography gutterBottom variant="h5" component="h2">
             {props.products.name}
           </Typography>
-          <Typography className={classes.content} color="secondary" gutterBottom variant="h6" component="h2">
-            {props.products.price} VND
-          </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
+          <Typography gutterBottom variant="body2" color="textSecondary" component="p">
             {props.products.description}
+          </Typography>
+          <Typography className={classes.content} color="secondary" variant="h6" component="h2">
+            {formatNumber(props.products.price)} VND
           </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions className={classes.action}>
-        <Button size="medium" variant="outlined" color="secondary">
-          Buy now
+        <Button size="medium" variant="outlined" color="secondary" onClick={()=>AddtoCart(props.products._id)}>
+          Mua ngay
         </Button>
       </CardActions>
     </Card>
@@ -58,4 +93,5 @@ export default function ProductsCard(props: Props) {
 }
 interface Props {
   products: IProduct;
+
 }

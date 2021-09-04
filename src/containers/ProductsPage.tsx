@@ -3,12 +3,15 @@ import {
   Container,
   Grid,
   makeStyles,
+  IconButton,
+  Drawer
 } from "@material-ui/core";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import ProductsCard from "../components/ProductsCard";
 import { IProduct } from "../model/Products";
-
+import { AddShoppingCart } from '@material-ui/icons'
+import Cart from "./Cart"
 // Make style with MUI
 const useStyles = makeStyles({
   root: {
@@ -20,6 +23,18 @@ const useStyles = makeStyles({
     justifyContent: "center",
     alignItems: "center",
   },
+  cart:{
+    top: 10,
+    right: 20,
+    position: "fixed",
+    zIndex: 9999,
+    color: "white",
+  },
+  list:{
+    width: 480,
+    padding: 20,
+    textAlign: "center",
+  }
 });
 
 export default function ProductsPage() {
@@ -29,11 +44,12 @@ export default function ProductsPage() {
   // Manage state
   const [products, setProducts] = useState<IProduct[]>([]);
   const [loading, setLoadding] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
 
   //   Load data
-  const loadProducts = () => {
+  const loadProducts = async () => {
     setLoadding(true);
-    axios
+    await axios
       .get("http://localhost:3001/api/products")
       .then((res) => {
         setProducts(res.data.data);
@@ -48,20 +64,26 @@ export default function ProductsPage() {
   useEffect(() => {
     loadProducts();
   }, []);
-  console.log(products)
+  console.log(products);
 
   return (
     // Container chua products
-    <Container>
-      <Grid container spacing={3} className={classes.root}>
+    <Container className={classes.root}>
+      <Drawer classes={{paper: classes.list}} anchor="right" open={cartOpen} onClose={()=>setCartOpen(false)}>
+        <Cart/>
+      </Drawer>
+      <IconButton className={classes.cart} onClick={()=>setCartOpen(true)}>
+        <AddShoppingCart />
+      </IconButton>
+      <Grid container spacing={3}>
         {loading ? (
           <div className={classes.lazy}>
-            <CircularProgress size="5px" thickness={5} />
+            <CircularProgress size="3rem" thickness={5} />
           </div>
         ) : (
           products.map((product) => (
             <Grid item key={product._id} sm={3} xs={12}>
-              <ProductsCard products={product}/>
+              <ProductsCard products={product} />
             </Grid>
           ))
         )}
