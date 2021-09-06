@@ -4,6 +4,7 @@ import "@fontsource/roboto";
 import ProductsPage from "./containers/ProductsPage";
 import Header from "./components/Header";
 import AdminPage from "./containers/AdminPage";
+import AddProduct from "./components/AddProduct";
 function App() {
   return (
     <div>
@@ -12,6 +13,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={ProductsPage}/>
           <Route path="/dashboard" component={AdminPage}/>
+          <Route path="/add" component={AddProduct}/>
         </Switch>
       </Router>
     </div>

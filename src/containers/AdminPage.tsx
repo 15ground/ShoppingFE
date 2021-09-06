@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { DataGrid } from "@material-ui/data-grid";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import {
   Container,
   IconButton,
@@ -15,7 +15,7 @@ import {
   TableRow,
 } from "@material-ui/core";
 import { IProduct } from "../model/Products";
-import { Delete, Edit } from "@material-ui/icons";
+import { Add, Delete, Edit } from "@material-ui/icons";
 
 const useStyles = makeStyles({
   root: {
@@ -41,7 +41,7 @@ export default function AdminPage() {
   const [rowsPerPage, setRowsPerPage] = useState(3);
 
   const handleChangePage = (event: any, nextPage: any) => {
-    setPage(nextPage)
+    setPage(nextPage);
   };
   const handleChangeRowsPerPage = (event: any) => {
     setRowsPerPage(event.target.value);
@@ -58,14 +58,37 @@ export default function AdminPage() {
       });
   };
 
+  const onClickDelete = async (id: string) => {
+    let confirm = window.confirm(
+      "Xác nhận xóa sản phẩm ?"
+    );
+    if (confirm) {
+      await axios
+        .post("http://localhost:3001/api/products/delete/" + id)
+        .then((result) => {
+          console.log(result);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };   
   // Side effects
   useEffect(() => {
     loadProducts();
   }, []);
-  console.log(products);
+
+  useEffect(() => {
+    loadProducts();
+  }, [products]);
 
   return (
     <Container className={classes.root}>
+      <Link to="/add">
+        <IconButton>
+          <Add />
+        </IconButton>
+      </Link>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -102,7 +125,11 @@ export default function AdminPage() {
                     <IconButton>
                       <Edit />
                     </IconButton>
-                    <IconButton>
+                    <IconButton
+                      onClick={() => {
+                        onClickDelete(product._id);
+                      }}
+                    >
                       <Delete />
                     </IconButton>
                   </TableCell>
