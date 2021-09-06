@@ -1,5 +1,4 @@
-import { Box, Divider, makeStyles, Typography } from "@material-ui/core";
-import { findByLabelText } from "@testing-library/react";
+import { Box, makeStyles, Typography } from "@material-ui/core";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import CartItem from "../components/CartItem";
