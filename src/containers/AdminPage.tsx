@@ -76,10 +76,6 @@ export default function AdminPage() {
   // Side effects
   useEffect(() => {
     loadProducts();
-  }, []);
-
-  useEffect(() => {
-    loadProducts();
   }, [products]);
 
   return (
