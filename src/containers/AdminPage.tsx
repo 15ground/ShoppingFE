@@ -59,9 +59,7 @@ export default function AdminPage() {
   };
 
   const onClickDelete = async (id: string) => {
-    let confirm = window.confirm(
-      "Xác nhận xóa sản phẩm ?"
-    );
+    let confirm = window.confirm("Xác nhận xóa sản phẩm ?");
     if (confirm) {
       await axios
         .post("http://localhost:3001/api/products/delete/" + id)
@@ -72,7 +70,7 @@ export default function AdminPage() {
           console.log(err);
         });
     }
-  };   
+  };
   // Side effects
   useEffect(() => {
     loadProducts();
@@ -118,9 +116,11 @@ export default function AdminPage() {
                     {product.description}
                   </TableCell>
                   <TableCell className={classes.content}>
-                    <IconButton>
-                      <Edit />
-                    </IconButton>
+                    <Link to={`/edit/${product._id}`}>
+                      <IconButton>
+                        <Edit />
+                      </IconButton>
+                    </Link>
                     <IconButton
                       onClick={() => {
                         onClickDelete(product._id);

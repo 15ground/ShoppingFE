@@ -6,12 +6,14 @@ import {
   CardContent,
   CardMedia,
   makeStyles,
+  Snackbar,
   Typography,
 } from "@material-ui/core";
-import React from "react";
+import { Alert } from "@material-ui/lab";
+import React, { useState } from "react";
 import { CartItems } from "../model/CartItems";
 import { IProduct } from "../model/Products";
-import {formatNumber} from "../utils/Format"
+import { formatNumber } from "../utils/Format";
 
 const useStyles = makeStyles({
   oot: {
@@ -20,15 +22,17 @@ const useStyles = makeStyles({
   images: {
     height: 250,
   },
-  content:{
+  content: {
     fontSize: 16,
   },
-  action:{
+  action: {
     float: "right",
-    padding: 10
-  }
+    padding: 10,
+  },
 });
 export default function ProductsCard(props: Props) {
+  const [open, setOpen] = useState(false);
+
   const classes = useStyles();
 
   function callData() {
@@ -60,7 +64,14 @@ export default function ProductsCard(props: Props) {
       listCart.push(newItems);
     }
     localStorage.setItem("cart", JSON.stringify(listCart));
+    setOpen(true);
   }
+  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
 
   return (
     <Card>
@@ -74,23 +85,42 @@ export default function ProductsCard(props: Props) {
           <Typography gutterBottom variant="h5" component="h2">
             {props.products.name}
           </Typography>
-          <Typography gutterBottom variant="body2" color="textSecondary" component="p">
+          <Typography
+            gutterBottom
+            variant="body2"
+            color="textSecondary"
+            component="p"
+          >
             {props.products.description}
           </Typography>
-          <Typography className={classes.content} color="secondary" variant="h6" component="h2">
+          <Typography
+            className={classes.content}
+            color="secondary"
+            variant="h6"
+            component="h2"
+          >
             {formatNumber(props.products.price)} VND
           </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions className={classes.action}>
-        <Button size="medium" variant="outlined" color="secondary" onClick={()=>AddtoCart(props.products._id)}>
+        <Button
+          size="medium"
+          variant="outlined"
+          color="secondary"
+          onClick={() => AddtoCart(props.products._id)}
+        >
           Mua ngay
         </Button>
+        <Snackbar anchorOrigin={{vertical: 'bottom', horizontal: 'left'}} open={open} autoHideDuration={3000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="success">
+            Add to cart successfully!
+          </Alert>
+        </Snackbar>
       </CardActions>
     </Card>
   );
 }
 interface Props {
   products: IProduct;
-
 }
