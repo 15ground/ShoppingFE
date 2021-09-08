@@ -5,13 +5,17 @@ import {
   Input,
   InputLabel,
   makeStyles,
+  TextField,
   Typography,
 } from "@material-ui/core";
 import axios from "axios";
 import React, { useState } from "react";
 import { useHistory } from "react-router";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   container: {
     width: "50%",
     margin: "5% 0 0 25%",
@@ -19,7 +23,15 @@ const useStyles = makeStyles({
       marginTop: 20,
     },
   },
-});
+  formAdd: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  inputField: {
+    width: "100%",
+    margin: theme.spacing(1, 0),
+  },
+}));
 
 const initialValue = {
   name: "",
@@ -29,6 +41,32 @@ const initialValue = {
 };
 
 export default function AddProduct() {
+  const Schema = yup.object().shape({
+    images: yup
+      .string()
+      .required("* Link hình ảnh không được để trống.")
+      .trim(),
+    name: yup
+      .string()
+      .required("* Tên sản phẩm không được để trống.")
+      .min(6, "* Tên phải có ít nhất 6 kí tự.")
+      .trim(),
+    price: yup
+      .number()
+      .positive("* Giá bán phải là số dương.")
+      .integer()
+      .transform((value) => (isNaN(value) ? undefined : value))
+      .required("* Giá bán của sản phẩm không được để trống.")
+      .min(0, "* Giá bán không được nhỏ hơn 0."),
+  });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(Schema),
+  });
+
   const [product, setProduct] = useState(initialValue);
   const { name, images, price, description } = product;
   const classes = useStyles();
@@ -49,54 +87,69 @@ export default function AddProduct() {
       });
   };
   return (
-    <FormGroup className={classes.container}>
-      <Typography variant="h4">Add Product</Typography>
-      <FormControl>
-        <InputLabel htmlFor="my-input">Name</InputLabel>
-        <Input
-          onChange={(e) => onValueChange(e)}
-          name="name"
-          value={name}
-          id="my-input"
-        />
-      </FormControl>
-      <FormControl>
-        <InputLabel htmlFor="my-input">Images</InputLabel>
-        <Input
-          onChange={(e) => onValueChange(e)}
-          name="images"
-          value={images}
-          id="my-input"
-        />
-      </FormControl>
-      <FormControl>
-        <InputLabel htmlFor="my-input">Price</InputLabel>
-        <Input
-          onChange={(e) => onValueChange(e)}
-          name="price"
-          value={price}
-          type="number"
-          id="my-input"
-        />
-      </FormControl>
-      <FormControl>
-        <InputLabel htmlFor="my-input">Description</InputLabel>
-        <Input
-          onChange={(e) => onValueChange(e)}
-          name="description"
-          value={description}
-          id="my-input"
-        />
-      </FormControl>
-      <FormControl>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => AddProduct()}
-        >
-          Add
-        </Button>
-      </FormControl>
-    </FormGroup>
+    <form onSubmit={handleSubmit(AddProduct)} className={classes.formAdd}>
+      <FormGroup className={classes.container}>
+        <Typography variant="h4">Add Product</Typography>
+        <FormControl>
+          <TextField
+            {...register("name")}
+            className={classes.inputField}
+            placeholder="Vui long dien ten san pham"
+            label="Ten san pham"
+            variant="outlined"
+            name="name"
+            value={name}
+            onChange={(e) => onValueChange(e)}
+            error={Boolean(errors.name)}
+            helperText={errors.name?.message}
+          />
+        </FormControl>
+        <FormControl>
+          <TextField
+            {...register("images")}
+            className={classes.inputField}
+            placeholder="Vui long dien link hinh anh san pham"
+            label="Link hinh anh"
+            variant="outlined"
+            name="images"
+            value={images}
+            onChange={(e) => onValueChange(e)}
+            error={Boolean(errors.images)}
+            helperText={errors.images?.message}
+          />
+        </FormControl>
+        <FormControl>
+          <TextField
+            {...register("price")}
+            className={classes.inputField}
+            placeholder="Vui long dien gia ban san pham"
+            label="Gia ban"
+            variant="outlined"
+            name="price"
+            value={price}
+            type="number"
+            onChange={(e) => onValueChange(e)}
+            error={Boolean(errors.price)}
+            helperText={errors.price?.message}
+          />
+        </FormControl>
+        <FormControl>
+          <TextField
+            className={classes.inputField}
+            placeholder="Vui long dien mo ta san pham"
+            label="Mo ta"
+            variant="outlined"
+            name="description"
+            value={description}
+            onChange={(e) => onValueChange(e)}
+          />
+        </FormControl>
+        <FormControl>
+          <Button variant="contained" color="primary" type="submit">
+            Add
+          </Button>
+        </FormControl>
+      </FormGroup>
+    </form>
   );
 }

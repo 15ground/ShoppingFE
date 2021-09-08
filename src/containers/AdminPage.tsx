@@ -98,7 +98,7 @@ export default function AdminPage() {
             {products
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((product) => (
-                <TableRow>
+                <TableRow key={product._id}>
                   <TableCell className={classes.content}>
                     {product.name}
                   </TableCell>
