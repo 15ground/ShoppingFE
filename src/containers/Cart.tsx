@@ -76,6 +76,7 @@ export default function Cart() {
   useEffect(() => {
     loadCartData();
   }, [listProducts]);
+  
 
   return (
     <Box>
