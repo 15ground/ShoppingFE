@@ -2,8 +2,6 @@ import {
   Button,
   FormControl,
   FormGroup,
-  Input,
-  InputLabel,
   makeStyles,
   TextField,
   Typography,
@@ -98,7 +96,7 @@ export default function EditProduct() {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [id]);
 
   return (
     <form onSubmit={handleSubmit(EditProduct)} className={classes.formAdd}>

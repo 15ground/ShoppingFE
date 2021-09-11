@@ -8,12 +8,14 @@ import {
   makeStyles,
   Snackbar,
   Typography,
-} from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
-import React, { useState } from "react";
-import { CartItems } from "../model/CartItems";
-import { IProduct } from "../model/Products";
-import { formatNumber } from "../utils/Format";
+} from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
+import React, { useState } from 'react';
+import { addToCart } from '../containers/cart.slice';
+import { CartItems } from '../model/CartItems';
+import { IProduct } from '../model/Products';
+import { useAppDispatch } from '../store.hooks';
+import { formatNumber } from '../utils/Format';
 
 const useStyles = makeStyles({
   oot: {
@@ -26,7 +28,7 @@ const useStyles = makeStyles({
     fontSize: 16,
   },
   action: {
-    float: "right",
+    float: 'right',
     padding: 10,
   },
 });
@@ -37,11 +39,11 @@ export default function ProductsCard(props: Props) {
 
   function callData() {
     var cartItems: CartItems[] = [];
-    var jsonCart = localStorage.getItem("cart");
+    var jsonCart = localStorage.getItem('cart');
     if (jsonCart != null) {
       cartItems = JSON.parse(jsonCart);
     } else {
-      localStorage.setItem("cart", "");
+      localStorage.setItem('cart', '');
     }
     return cartItems;
   }
@@ -63,16 +65,20 @@ export default function ProductsCard(props: Props) {
       };
       listCart.push(newItems);
     }
-    localStorage.setItem("cart", JSON.stringify(listCart));
+    localStorage.setItem('cart', JSON.stringify(listCart));
     setOpen(true);
   }
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") {
+    if (reason === 'clickaway') {
       return;
     }
     setOpen(false);
   };
-
+  const dispatch = useAppDispatch();
+  const addToCartHandler = (product: IProduct) => {
+    dispatch(addToCart(product));
+    setOpen(true);
+  };
   return (
     <Card>
       <CardActionArea>
@@ -108,11 +114,16 @@ export default function ProductsCard(props: Props) {
           size="medium"
           variant="outlined"
           color="secondary"
-          onClick={() => AddtoCart(props.products._id)}
+          onClick={() => addToCartHandler(props.products)}
         >
           Mua ngay
         </Button>
-        <Snackbar anchorOrigin={{vertical: 'bottom', horizontal: 'left'}} open={open} autoHideDuration={3000} onClose={handleClose}>
+        <Snackbar
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+          open={open}
+          autoHideDuration={3000}
+          onClose={handleClose}
+        >
           <Alert onClose={handleClose} severity="success">
             Add to cart successfully!
           </Alert>

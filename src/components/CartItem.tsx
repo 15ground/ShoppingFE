@@ -7,65 +7,77 @@ import {
   IconButton,
   makeStyles,
   Typography,
-} from "@material-ui/core";
-import { Add, Delete, Remove } from "@material-ui/icons";
-import React from "react";
+} from '@material-ui/core';
+import { Add, Delete, Remove } from '@material-ui/icons';
+import React from 'react';
+import { IProduct } from '../model/Products';
 
 const useStyles = makeStyles({
-  content:{
-    display: "flex",
-    padding: "10px 0",
-    justifyContent: "space-around"
+  content: {
+    display: 'flex',
+    padding: '10px 0',
+    justifyContent: 'space-around',
   },
-  images:{
-    width: "30%",
+  images: {
+    width: '30%',
     height: 150,
-    objectFit: "cover",
+    objectFit: 'cover',
   },
-  action:{
-    display: "flex",
-    justifyContent: "space-around",
-    marginTop: 40
-  }
-})
-
+  action: {
+    display: 'flex',
+    justifyContent: 'space-around',
+    marginTop: 40,
+  },
+});
 
 export default function CartItem(props: Props) {
-  // Make style 
+  // Make style
   const classes = useStyles();
 
   return (
     <Container>
-      <Divider/>
+      <Divider />
       <Box className={classes.content}>
-      <Avatar className={classes.images} variant="rounded" alt="Product's Image" src={props.images} />
-      <Box >
-        <Typography variant="h5">{props.name}</Typography>
-        <Box className={classes.action}>
-        <Button size="small" variant="outlined" color="secondary" onClick={()=>props.removeFromCart(props._id)}>
-          <Remove/>
-        </Button>
-        <Typography variant="h5">{props.quantity}</Typography>
-        <Button size="small" variant="outlined" color="secondary"  onClick={()=>props.addToCart(props._id)}>
-          <Add/>
-        </Button>
+        <Avatar
+          className={classes.images}
+          variant="rounded"
+          alt="Product's Image"
+          src={props.products.images}
+        />
+        <Box>
+          <Typography variant="h5">{props.products.name}</Typography>
+          <Box className={classes.action}>
+            <Button
+              size="small"
+              variant="outlined"
+              color="secondary"
+              onClick={() => props.removeFromCart()}
+            >
+              <Remove />
+            </Button>
+            <Typography variant="h5">{props.quantity}</Typography>
+            <Button
+              size="small"
+              variant="outlined"
+              color="secondary"
+              onClick={() => props.addToCart()}
+            >
+              <Add />
+            </Button>
+          </Box>
+          <IconButton onClick={() => props.deleteItem()}>
+            <Delete />
+          </IconButton>
         </Box>
-      <IconButton onClick={() => props.deleteItem(props._id)}>
-        <Delete />
-      </IconButton>
-      </Box>
       </Box>
       <Divider light />
     </Container>
   );
 }
 type Props = {
-  _id: string;
-  name: string;
-  images: string;
-  price: number;
+  products: IProduct;
   quantity: number;
-  deleteItem(id: string): void;
-  addToCart(id: string): void;
-  removeFromCart(id: string): void;
+  deleteItem(): void;
+  addToCart(): void;
+  removeFromCart(): void;
 };

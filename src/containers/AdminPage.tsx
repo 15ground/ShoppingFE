@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 import {
   Container,
   IconButton,
@@ -13,23 +13,23 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-} from "@material-ui/core";
-import { IProduct } from "../model/Products";
-import { Add, Delete, Edit } from "@material-ui/icons";
+} from '@material-ui/core';
+import { IProduct } from '../model/Products';
+import { Add, Delete, Edit } from '@material-ui/icons';
 
 const useStyles = makeStyles({
   root: {
-    width: "100vw",
-    height: "100vh",
+    width: '100vw',
+    height: '100vh',
     paddingTop: 5,
     marginTop: 100,
   },
   title: {
-    textAlign: "center",
+    textAlign: 'center',
     fontWeight: 600,
   },
   content: {
-    textAlign: "center",
+    textAlign: 'center',
   },
 });
 
@@ -49,7 +49,7 @@ export default function AdminPage() {
   //   Load data
   const loadProducts = async () => {
     await axios
-      .get("http://localhost:3001/api/products")
+      .get('http://localhost:3001/api/products')
       .then((res) => {
         setProducts(res.data.data);
       })
@@ -59,10 +59,10 @@ export default function AdminPage() {
   };
 
   const onClickDelete = async (id: string) => {
-    let confirm = window.confirm("Xác nhận xóa sản phẩm ?");
+    let confirm = window.confirm('Xác nhận xóa sản phẩm ?');
     if (confirm) {
       await axios
-        .post("http://localhost:3001/api/products/delete/" + id)
+        .post('http://localhost:3001/api/products/delete/' + id)
         .then((result) => {
           console.log(result);
         })
@@ -105,7 +105,7 @@ export default function AdminPage() {
                   <TableCell className={classes.content}>
                     <img
                       src={product.images}
-                      style={{ width: "80px", height: "80px" }}
+                      style={{ width: '80px', height: '80px' }}
                       alt="data"
                     />
                   </TableCell>
