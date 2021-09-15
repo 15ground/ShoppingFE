@@ -5,57 +5,57 @@ import {
   makeStyles,
   TextField,
   Typography,
-} from "@material-ui/core";
-import axios from "axios";
-import React, { useState } from "react";
-import { useHistory } from "react-router";
-import * as yup from "yup";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+} from '@material-ui/core';
+import axios from 'axios';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router';
+import * as yup from 'yup';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    width: "50%",
-    margin: "5% 0 0 25%",
-    "& > *": {
+    width: '50%',
+    margin: '5% 0 0 25%',
+    '& > *': {
       marginTop: 20,
     },
   },
   formAdd: {
-    display: "flex",
-    flexDirection: "column",
+    display: 'flex',
+    flexDirection: 'column',
   },
   inputField: {
-    width: "100%",
+    width: '100%',
     margin: theme.spacing(1, 0),
   },
 }));
 
 const initialValue = {
-  name: "",
-  images: "",
+  name: '',
+  images: '',
   price: 0,
-  description: "",
+  description: '',
 };
 
 export default function AddProduct() {
   const Schema = yup.object().shape({
     images: yup
       .string()
-      .required("* Link hình ảnh không được để trống.")
+      .required('* Link hình ảnh không được để trống.')
       .trim(),
     name: yup
       .string()
-      .required("* Tên sản phẩm không được để trống.")
-      .min(6, "* Tên phải có ít nhất 6 kí tự.")
+      .required('* Tên sản phẩm không được để trống.')
+      .min(6, '* Tên phải có ít nhất 6 kí tự.')
       .trim(),
     price: yup
       .number()
-      .positive("* Giá bán phải là số dương.")
+      .positive('* Giá bán phải là số dương.')
       .integer()
       .transform((value) => (isNaN(value) ? undefined : value))
-      .required("* Giá bán của sản phẩm không được để trống.")
-      .min(0, "* Giá bán không được nhỏ hơn 0."),
+      .required('* Giá bán của sản phẩm không được để trống.')
+      .min(0, '* Giá bán không được nhỏ hơn 0.'),
   });
   const {
     register,
@@ -75,10 +75,10 @@ export default function AddProduct() {
   };
   const AddProduct = async () => {
     await axios
-      .post("http://localhost:3001/api/products", product)
+      .post('http://localhost:8080/api/products', product)
       .then((result) => {
         console.log(result);
-        history.push("./dashboard");
+        history.push('./dashboard');
       })
       .catch((err) => {
         console.log(err);
@@ -90,7 +90,7 @@ export default function AddProduct() {
         <Typography variant="h4">Add Product</Typography>
         <FormControl>
           <TextField
-            {...register("name")}
+            {...register('name')}
             className={classes.inputField}
             placeholder="Vui long dien ten san pham"
             label="Ten san pham"
@@ -104,7 +104,7 @@ export default function AddProduct() {
         </FormControl>
         <FormControl>
           <TextField
-            {...register("images")}
+            {...register('images')}
             className={classes.inputField}
             placeholder="Vui long dien link hinh anh san pham"
             label="Link hinh anh"
@@ -118,7 +118,7 @@ export default function AddProduct() {
         </FormControl>
         <FormControl>
           <TextField
-            {...register("price")}
+            {...register('price')}
             className={classes.inputField}
             placeholder="Vui long dien gia ban san pham"
             label="Gia ban"

@@ -49,9 +49,11 @@ export default function AdminPage() {
   //   Load data
   const loadProducts = async () => {
     await axios
-      .get('http://localhost:3001/api/products')
+      .get('http://localhost:8080/api/products')
       .then((res) => {
-        setProducts(res.data.data);
+        setProducts(res.data);
+        console.log(res.data);
+        // setProducts(res.data.data);
       })
       .catch((err) => {
         console.log(err);
@@ -62,7 +64,7 @@ export default function AdminPage() {
     let confirm = window.confirm('Xác nhận xóa sản phẩm ?');
     if (confirm) {
       await axios
-        .post('http://localhost:3001/api/products/delete/' + id)
+        .delete('http://localhost:8080/api/products/' + id)
         .then((result) => {
           console.log(result);
         })
@@ -98,7 +100,7 @@ export default function AdminPage() {
             {products
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((product) => (
-                <TableRow key={product._id}>
+                <TableRow key={product.id}>
                   <TableCell className={classes.content}>
                     {product.name}
                   </TableCell>
@@ -116,14 +118,14 @@ export default function AdminPage() {
                     {product.description}
                   </TableCell>
                   <TableCell className={classes.content}>
-                    <Link to={`/edit/${product._id}`}>
+                    <Link to={`/edit/${product.id}`}>
                       <IconButton>
                         <Edit />
                       </IconButton>
                     </Link>
                     <IconButton
                       onClick={() => {
-                        onClickDelete(product._id);
+                        onClickDelete(product.id);
                       }}
                     >
                       <Delete />

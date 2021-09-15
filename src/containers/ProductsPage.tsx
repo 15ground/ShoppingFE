@@ -4,37 +4,37 @@ import {
   Grid,
   makeStyles,
   IconButton,
-  Drawer
-} from "@material-ui/core";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import ProductsCard from "../components/ProductsCard";
-import { IProduct } from "../model/Products";
-import { AddShoppingCart } from '@material-ui/icons'
-import Cart from "./Cart"
+  Drawer,
+} from '@material-ui/core';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import ProductsCard from '../components/ProductsCard';
+import { IProduct } from '../model/Products';
+import { AddShoppingCart } from '@material-ui/icons';
+import Cart from './Cart';
 // Make style with MUI
 const useStyles = makeStyles({
   root: {
     marginTop: 100,
   },
   lazy: {
-    width: "100%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  cart:{
+  cart: {
     top: 10,
     right: 20,
-    position: "fixed",
+    position: 'fixed',
     zIndex: 9999,
-    color: "white",
+    color: 'white',
   },
-  list:{
+  list: {
     width: 480,
     padding: 20,
-    textAlign: "center",
-  }
+    textAlign: 'center',
+  },
 });
 
 export default function ProductsPage() {
@@ -50,9 +50,9 @@ export default function ProductsPage() {
   const loadProducts = async () => {
     setLoadding(true);
     await axios
-      .get("http://localhost:3001/api/products")
+      .get('http://localhost:8080/api/products')
       .then((res) => {
-        setProducts(res.data.data);
+        setProducts(res.data);
         setLoadding(false);
       })
       .catch((err) => {
@@ -64,15 +64,19 @@ export default function ProductsPage() {
   useEffect(() => {
     loadProducts();
   }, []);
-  console.log(products);
 
   return (
     // Container chua products
     <Container className={classes.root}>
-      <Drawer classes={{paper: classes.list}} anchor="right" open={cartOpen} onClose={()=>setCartOpen(false)}>
-        <Cart/>
+      <Drawer
+        classes={{ paper: classes.list }}
+        anchor="right"
+        open={cartOpen}
+        onClose={() => setCartOpen(false)}
+      >
+        <Cart />
       </Drawer>
-      <IconButton className={classes.cart} onClick={()=>setCartOpen(true)}>
+      <IconButton className={classes.cart} onClick={() => setCartOpen(true)}>
         <AddShoppingCart />
       </IconButton>
       <Grid container spacing={3}>
@@ -82,7 +86,7 @@ export default function ProductsPage() {
           </div>
         ) : (
           products.map((product) => (
-            <Grid item key={product._id} sm={3} xs={12}>
+            <Grid item key={product.id} sm={3} xs={12}>
               <ProductsCard products={product} />
             </Grid>
           ))

@@ -1,9 +1,6 @@
 import { Box, makeStyles, Typography } from '@material-ui/core';
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
 import CartItem from '../components/CartItem';
 import TotalPrice from '../components/TotalPrice';
-import { CartItems } from '../model/CartItems';
 import { IProduct } from '../model/Products';
 import { useAppDispatch, useAppSelector } from '../store.hooks';
 import {
@@ -28,16 +25,21 @@ export default function Cart() {
   const classes = useStyles();
   // Dispatch action
   const dispatch = useAppDispatch();
+
   const addToCartHandler = (product: IProduct) => {
     dispatch(addToCart(product));
   };
+
   const removeFromCartHandler = (productId: string) =>
     dispatch(removeFromCart(productId));
+
   const deleteFromCartHandler = (productId: string) =>
     dispatch(deleteFromCart(productId));
+
   // Get data from Redux
   const CartItems = useAppSelector(getCartItems);
   const total = useAppSelector(getTotalPrice);
+
   return (
     <Box>
       <Typography className={classes.title} variant="h5">
@@ -47,12 +49,12 @@ export default function Cart() {
       {CartItems.map((items) => {
         return (
           <CartItem
-            key={items._id}
+            key={items.id}
             products={items}
             quantity={items.quantity}
             addToCart={() => addToCartHandler(items)}
-            removeFromCart={() => removeFromCartHandler(items._id)}
-            deleteItem={() => deleteFromCartHandler(items._id)}
+            removeFromCart={() => removeFromCartHandler(items.id)}
+            deleteItem={() => deleteFromCartHandler(items.id)}
           />
         );
       })}

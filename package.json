@@ -1,7 +1,7 @@
 {
   "name": "shop-fe",
   "version": "0.1.0",
-  "proxy": "http://localhost:3001",
+  "proxy": "http://localhost:8080",
   "private": true,
   "dependencies": {
     "@fontsource/roboto": "^4.5.0",

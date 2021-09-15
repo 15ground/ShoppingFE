@@ -12,7 +12,6 @@ import {
 import { Alert } from '@material-ui/lab';
 import React, { useState } from 'react';
 import { addToCart } from '../containers/cart.slice';
-import { CartItems } from '../model/CartItems';
 import { IProduct } from '../model/Products';
 import { useAppDispatch } from '../store.hooks';
 import { formatNumber } from '../utils/Format';
@@ -37,37 +36,6 @@ export default function ProductsCard(props: Props) {
 
   const classes = useStyles();
 
-  function callData() {
-    var cartItems: CartItems[] = [];
-    var jsonCart = localStorage.getItem('cart');
-    if (jsonCart != null) {
-      cartItems = JSON.parse(jsonCart);
-    } else {
-      localStorage.setItem('cart', '');
-    }
-    return cartItems;
-  }
-  function AddtoCart(idPros: string) {
-    var check = false;
-    var listCart: CartItems[] = callData();
-    // Kiem tra san pham trong gio hang
-    listCart.forEach((x) => {
-      if (x.id === idPros) {
-        ++x.quantity;
-        check = true;
-      }
-      return;
-    });
-    if (check === false) {
-      const newItems: CartItems = {
-        id: idPros,
-        quantity: 1,
-      };
-      listCart.push(newItems);
-    }
-    localStorage.setItem('cart', JSON.stringify(listCart));
-    setOpen(true);
-  }
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === 'clickaway') {
       return;
