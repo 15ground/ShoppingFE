@@ -67,6 +67,7 @@ export default function AdminPage() {
         .delete('http://localhost:8080/api/products/' + id)
         .then((result) => {
           console.log(result);
+          loadProducts();
         })
         .catch((err) => {
           console.log(err);
@@ -76,7 +77,8 @@ export default function AdminPage() {
   // Side effects
   useEffect(() => {
     loadProducts();
-  }, [products]);
+  }, []);
+  console.log(products);
 
   return (
     <Container className={classes.root}>
@@ -92,6 +94,7 @@ export default function AdminPage() {
               <TableCell className={classes.title}>Name</TableCell>
               <TableCell className={classes.title}>Images</TableCell>
               <TableCell className={classes.title}>Price</TableCell>
+              <TableCell className={classes.title}>Category</TableCell>
               <TableCell className={classes.title}>Description</TableCell>
               <TableCell className={classes.title}>Action</TableCell>
             </TableRow>
@@ -113,6 +116,9 @@ export default function AdminPage() {
                   </TableCell>
                   <TableCell className={classes.content}>
                     {product.price}
+                  </TableCell>
+                  <TableCell className={classes.content}>
+                    {product.category.name}
                   </TableCell>
                   <TableCell className={classes.content}>
                     {product.description}

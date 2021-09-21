@@ -2,7 +2,10 @@ import {
   Button,
   FormControl,
   FormGroup,
+  InputLabel,
   makeStyles,
+  MenuItem,
+  Select,
   TextField,
   Typography,
 } from '@material-ui/core';
@@ -12,6 +15,7 @@ import { useHistory, useParams } from 'react-router';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { ICategory } from '../model/Categories';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -35,6 +39,7 @@ const initialValue = {
   name: '',
   images: '',
   price: 0,
+  categoryId: '',
   description: '',
 };
 
@@ -66,7 +71,9 @@ export default function EditProduct() {
   });
 
   const [product, setProduct] = useState(initialValue);
-  const { name, images, price, description } = product;
+  const { name, images, price, categoryId, description } = product;
+  const [open, setOpen] = useState(false);
+  const [categories, setCategories] = useState<ICategory[]>([]);
 
   const { id }: any = useParams();
   const classes = useStyles();
@@ -74,6 +81,17 @@ export default function EditProduct() {
 
   const onValueChange = (e: any) => {
     setProduct({ ...product, [e.target.name]: e.target.value });
+  };
+  const handleChange = (e: any) => {
+    setProduct({ ...product, categoryId: e.target.value });
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
   };
   const EditProduct = async () => {
     await axios
@@ -96,7 +114,19 @@ export default function EditProduct() {
         console.log(err);
       });
   }, [id]);
-
+  const loadCategory = async () => {
+    await axios
+      .get('http://localhost:8080/api/category')
+      .then((res) => {
+        setCategories(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  useEffect(() => {
+    loadCategory();
+  }, []);
   return (
     <form onSubmit={handleSubmit(EditProduct)} className={classes.formAdd}>
       <FormGroup className={classes.container}>
@@ -143,6 +173,24 @@ export default function EditProduct() {
             error={Boolean(errors.price)}
             helperText={errors.price?.message}
           />
+        </FormControl>
+        <FormControl>
+          <InputLabel id="demo-controlled-open-select-label">
+            Category
+          </InputLabel>
+          <Select
+            labelId="demo-controlled-open-select-label"
+            id="demo-controlled-open-select"
+            open={open}
+            onClose={handleClose}
+            onOpen={handleOpen}
+            value={categoryId}
+            onChange={handleChange}
+          >
+            {categories.map((category) => (
+              <MenuItem value={category.id}>{category.name}</MenuItem>
+            ))}
+          </Select>
         </FormControl>
         <FormControl>
           <TextField
