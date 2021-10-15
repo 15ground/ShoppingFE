@@ -12,6 +12,7 @@ import ProductsCard from '../components/ProductsCard';
 import { IProduct } from '../model/Products';
 import { AddShoppingCart } from '@material-ui/icons';
 import Cart from './Cart';
+import { Pagination } from '@material-ui/lab';
 // Make style with MUI
 const useStyles = makeStyles({
   root: {
@@ -92,6 +93,7 @@ export default function ProductsPage() {
           ))
         )}
       </Grid>
+      {/* <Pagination count={10} variant="outlined" color="secondary" /> */}
     </Container>
   );
 }

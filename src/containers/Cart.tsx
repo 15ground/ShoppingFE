@@ -2,14 +2,14 @@ import { Box, makeStyles, Typography } from '@material-ui/core';
 import CartItem from '../components/CartItem';
 import TotalPrice from '../components/TotalPrice';
 import { IProduct } from '../model/Products';
-import { useAppDispatch, useAppSelector } from '../store.hooks';
+import { useAppDispatch, useAppSelector } from '../store/store.hooks';
 import {
   addToCart,
   getCartItems,
   getTotalPrice,
   removeFromCart,
   deleteFromCart,
-} from './cart.slice';
+} from '../store/cart.slice';
 
 const useStyles = makeStyles({
   title: {

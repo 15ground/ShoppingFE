@@ -7,7 +7,7 @@ import AdminPage from './containers/AdminPage';
 import AddProduct from './components/AddProduct';
 import EditProduct from './components/EditProduct';
 import { Provider } from 'react-redux';
-import store from './store';
+import store from './store/store';
 function App() {
   return (
     <Provider store={store}>

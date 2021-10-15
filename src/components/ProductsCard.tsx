@@ -11,9 +11,9 @@ import {
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import React, { useState } from 'react';
-import { addToCart } from '../containers/cart.slice';
+import { addToCart } from '../store/cart.slice';
 import { IProduct } from '../model/Products';
-import { useAppDispatch } from '../store.hooks';
+import { useAppDispatch } from '../store/store.hooks';
 import { formatNumber } from '../utils/Format';
 
 const useStyles = makeStyles({
